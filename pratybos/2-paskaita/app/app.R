@@ -1,16 +1,27 @@
 library(shiny)
-library(shinydashboard)
+# add dependency
+library(tidyverse)
+library(lubridate)
 
-ui <- dashboardPage(
-  dashboardHeader(title = "Paskaita 2"),
-  dashboardSidebar( selectizeInput(inputId = "imone", label = "Imones pavadinimas", choices = NULL, selected = NULL)),
-  dashboardBody(plotOutput("distPlot"),
-                plotOutput("plot"),
-                tableOutput("table"))
+ui <- fluidPage(
+  
+  titlePanel("2 Paskaita"),
+  sidebarLayout(
+    sidebarPanel(
+      selectizeInput(inputId = "imone", label = "Imones pavadinimas", choices = NULL, selected = NULL)
+    ),
+    mainPanel(
+      plotOutput("distPlot"),
+      plotOutput("plot")
+    )
+  )
 )
 
 server <- function(input, output, session) {
-  data <- read_csv("../../../laboratorinis/data/lab_sodra.csv")
+  # changed dir
+  
+  # data <- read_csv("../../../laboratorinis/data/lab_sodra.csv")
+  data <- read_csv("https://raw.githubusercontent.com/kestutisd/KTU-duomenu-vizualizacija/main/laboratorinis/data/lab_sodra.csv")
   updateSelectInput(session, "imone", choices = unique(data$name))
   output$distPlot <- renderPlot({
     data %>%
@@ -30,11 +41,6 @@ server <- function(input, output, session) {
       ylab("Vidutinis atlyginimas") +
       xlab("")
   })
-  
-  output$table <- renderTable({
-    data %>%
-      filter(name == input$imone)
-  })
 }
 
-shinyApp(ui, server)
+shinyApp(ui = ui, server = server)
