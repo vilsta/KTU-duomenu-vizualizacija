@@ -3,7 +3,7 @@ library(dplyr)
 library(tidyverse)
 library(readr)
 library(ggplot2)
-data1 <- read.csv("lab_sodra.csv")
+data1 <- read.csv("data/lab_sodra.csv")
 summary(data1)
 #1
 data2 <- data1 %>%
